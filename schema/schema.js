@@ -29,6 +29,11 @@ const UserType = new GraphQLObjectType({
     age: { type: GraphQLInt },
     company: {
       type: CompanyType,
+      resolve(parentValue, args) {
+        return jsonServer
+          .get(`/companies/${parentValue.companyId}`)
+          .then(response => response.data);
+      },
     },
   },
 });
