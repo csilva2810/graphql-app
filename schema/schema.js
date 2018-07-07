@@ -11,6 +11,7 @@ const {
   GraphQLInt,
   GraphQLSchema,
   GraphQLList,
+  GraphQLNonNull,
 } = graphql;
 
 const parseResponse = response => response.data;
@@ -49,6 +50,30 @@ const CompanyType = new GraphQLObjectType({
   }),
 });
 
+const mutation = new GraphQLObjectType({
+  name: 'Mutation',
+  fields: {
+    addUser: {
+      type: UserType,
+      args: {
+        firstName: {
+          type: new GraphQLNonNull(GraphQLString),
+        },
+        age: {
+          type: new GraphQLNonNull(GraphQLInt),
+        },
+        companyId: {
+          type: GraphQLString,
+        },
+      },
+      resolve(parentValue, { firstName, age }) {
+        return jsonServer
+          .post('/users', { firstName, age })
+          .then(response => response.data);
+      },
+    },
+  },
+});
 
 const RootQuery = new GraphQLObjectType({
   name: 'RootQueryType',
@@ -80,4 +105,5 @@ const RootQuery = new GraphQLObjectType({
 
 module.exports = new GraphQLSchema({
   query: RootQuery,
+  mutation,
 });
