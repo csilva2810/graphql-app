@@ -1,4 +1,9 @@
 const graphql = require('graphql');
+const axios = require('axios');
+
+const jsonServer = axios.create({
+  baseURL: 'http://localhost:3000',
+});
 
 const {
   GraphQLObjectType,
@@ -31,7 +36,9 @@ const RootQuery = new GraphQLObjectType({
         id: { type: GraphQLString },
       },
       resolve(parentValue, args) {
-        return users.find(user => user.id === args.id);
+        return jsonServer
+          .get(`/users/${args.id}`)
+          .then(response => response.data);
       },
     },
   },

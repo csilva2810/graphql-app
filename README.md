@@ -6,10 +6,13 @@ This application is meant to learn graphQl
 
 You must have **NodeJS** installed on your machine to run this application.
 
-```shel
-# installing dependencies
+```shell
+# install dependencies
 1. npm install
 
 # run the application
-2. node server.js
+2. npm run serve
+
+# start the json server to serve fake data
+3. npm run json:server
 ```
