@@ -12,11 +12,14 @@ const {
   GraphQLSchema,
 } = graphql;
 
-const users = [
-  { id: '1', firstName: 'Ronald', age: 23 },
-  { id: '2', firstName: 'Hermione', age: 22 },
-  { id: '3', firstName: 'Harry', age: 22 },
-];
+const CompanyType = new GraphQLObjectType({
+  name: 'Company',
+  fields: {
+    id: { type: GraphQLString },
+    name: { type: GraphQLString },
+    description: { type: GraphQLString },
+  },
+});
 
 const UserType = new GraphQLObjectType({
   name: 'User',
@@ -24,6 +27,9 @@ const UserType = new GraphQLObjectType({
     id: { type: GraphQLString },
     firstName: { type: GraphQLString },
     age: { type: GraphQLInt },
+    company: {
+      type: CompanyType,
+    },
   },
 });
 
