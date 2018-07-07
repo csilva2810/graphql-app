@@ -10,20 +10,14 @@ const {
   GraphQLString,
   GraphQLInt,
   GraphQLSchema,
+  GraphQLList,
 } = graphql;
 
-const CompanyType = new GraphQLObjectType({
-  name: 'Company',
-  fields: {
-    id: { type: GraphQLString },
-    name: { type: GraphQLString },
-    description: { type: GraphQLString },
-  },
-});
+const parseResponse = response => response.data;
 
 const UserType = new GraphQLObjectType({
   name: 'User',
-  fields: {
+  fields: () => ({
     id: { type: GraphQLString },
     firstName: { type: GraphQLString },
     age: { type: GraphQLInt },
@@ -32,11 +26,29 @@ const UserType = new GraphQLObjectType({
       resolve(parentValue, args) {
         return jsonServer
           .get(`/companies/${parentValue.companyId}`)
-          .then(response => response.data);
+          .then(parseResponse);
       },
     },
-  },
+  }),
 });
+
+const CompanyType = new GraphQLObjectType({
+  name: 'Company',
+  fields: () => ({
+    id: { type: GraphQLString },
+    name: { type: GraphQLString },
+    description: { type: GraphQLString },
+    users: {
+      type: new GraphQLList(UserType),
+      resolve(parentValue, args) {
+        return jsonServer
+          .get(`/companies/${parentValue.id}/users`)
+          .then(parseResponse);
+      },
+    },
+  }),
+});
+
 
 const RootQuery = new GraphQLObjectType({
   name: 'RootQueryType',
@@ -49,7 +61,7 @@ const RootQuery = new GraphQLObjectType({
       resolve(parentValue, args) {
         return jsonServer
           .get(`/users/${args.id}`)
-          .then(response => response.data);
+          .then(parseResponse);
       },
     },
     company: {
@@ -60,7 +72,7 @@ const RootQuery = new GraphQLObjectType({
       resolve(parentValue, args) {
         return jsonServer
           .get(`/companies/${args.id}`)
-          .then(response => response.data);
+          .then(parseResponse);
       },
     },
   },
