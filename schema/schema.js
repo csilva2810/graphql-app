@@ -24,7 +24,7 @@ const UserType = new GraphQLObjectType({
     age: { type: GraphQLInt },
     company: {
       type: CompanyType,
-      resolve(parentValue, args) {
+      resolve(parentValue) {
         return jsonServer
           .get(`/companies/${parentValue.companyId}`)
           .then(parseResponse);
@@ -41,7 +41,7 @@ const CompanyType = new GraphQLObjectType({
     description: { type: GraphQLString },
     users: {
       type: new GraphQLList(UserType),
-      resolve(parentValue, args) {
+      resolve(parentValue) {
         return jsonServer
           .get(`/companies/${parentValue.id}/users`)
           .then(parseResponse);
@@ -75,9 +75,31 @@ const mutation = new GraphQLObjectType({
     deleteUser: {
       type: UserType,
       args: { id: { type: new GraphQLNonNull(GraphQLString) } },
+      resolve(parentValue, { id }) {
+        return jsonServer
+          .delete(`/users/${id}`)
+          .then(parseResponse);
+      },
+    },
+    editUser: {
+      type: UserType,
+      args: {
+        id: {
+          type: new GraphQLNonNull(GraphQLString),
+        },
+        firstName: {
+          type: GraphQLString,
+        },
+        age: {
+          type: GraphQLInt,
+        },
+        companyId: {
+          type: GraphQLString,
+        },
+      },
       resolve(parentValue, args) {
         return jsonServer
-          .delete(`/users/${args.id}`)
+          .patch(`/users/${args.id}`, args)
           .then(parseResponse);
       },
     },

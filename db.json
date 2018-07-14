@@ -22,13 +22,18 @@
   "companies": [
     {
       "id": "1",
-      "name": "Apple",
-      "description": "iPhone"
+      "name": " Gringotts Wizarding Bank",
+      "description": "The wizards bank"
     },
     {
       "id": "2",
-      "name": "Google",
-      "description": "Search"
+      "name": "Leaky Cauldron",
+      "description": "The wizards pub"
+    },
+    {
+      "id": "3",
+      "name": "Ollivanders",
+      "description": "The wizards wand shop"
     }
   ]
 }
