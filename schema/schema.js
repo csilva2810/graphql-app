@@ -69,7 +69,16 @@ const mutation = new GraphQLObjectType({
       resolve(parentValue, { firstName, age }) {
         return jsonServer
           .post('/users', { firstName, age })
-          .then(response => response.data);
+          .then(parseResponse);
+      },
+    },
+    deleteUser: {
+      type: UserType,
+      args: { id: { type: new GraphQLNonNull(GraphQLString) } },
+      resolve(parentValue, args) {
+        return jsonServer
+          .delete(`/users/${args.id}`)
+          .then(parseResponse);
       },
     },
   },

@@ -4,7 +4,7 @@ This application is meant to learn graphQl
 
 ## How to run
 
-You must have **NodeJS** installed on your machine to run this application.
+You must have **NodeJS** installed alongside with **NPM** on your machine to run this application.
 
 ```shell
 # install dependencies
